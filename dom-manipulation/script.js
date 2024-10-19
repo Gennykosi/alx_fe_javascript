@@ -108,6 +108,17 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     }
   }
   
+  // Show a random quote
+  function showRandomQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length); // Get random index
+    const randomQuote = quotes[randomIndex];
+  
+    quoteDisplay.innerHTML = `
+      <p>"${randomQuote.text}"</p>
+      <p><em>- ${randomQuote.category}</em></p>
+    `;
+  }
+  
   // Export quotes to a JSON file
   function exportQuotes() {
     const dataStr = JSON.stringify(quotes, null, 2);
@@ -151,4 +162,5 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     populateCategories(); // Populate categories at startup
     filterQuotes(); // Apply the last saved filter or show all
   });
+  
   
