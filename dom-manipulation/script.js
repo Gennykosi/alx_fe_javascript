@@ -79,7 +79,7 @@ async function addQuote() {
 
       if (response.ok) {
         const savedQuote = await response.json();
-        quotes.push({ ...savedQuote, category });  // Add to local array
+        quotes.push({ ...savedQuote, category });
         saveQuotes();
         populateCategories();
         filterQuotes();
@@ -166,7 +166,7 @@ function syncQuotes(serverQuotes) {
     saveQuotes();
     populateCategories();
     filterQuotes();
-    alert('New quotes synced from server!');
+    alert('Quotes synced with server!');  // Message added here
   }
 }
 
@@ -183,4 +183,3 @@ document.addEventListener('DOMContentLoaded', () => {
   populateCategories();
   filterQuotes();
 });
-  
