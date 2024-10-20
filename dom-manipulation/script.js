@@ -1,4 +1,4 @@
-// Initialize the quotes array from local storage or use an empty array
+// Initialize quotes from local storage or use an empty array
 let quotes = JSON.parse(localStorage.getItem('quotes')) || [];
 
 // DOM Elements
@@ -62,16 +62,35 @@ function displayQuotes(quoteList) {
   });
 }
 
-// Add a new quote and update the DOM
-function addQuote() {
+// Add a new quote and POST it to the server
+async function addQuote() {
   const text = document.getElementById('newQuoteText').value.trim();
   const category = document.getElementById('newQuoteCategory').value.trim();
 
   if (text && category) {
-    quotes.push({ text, category });
-    saveQuotes();
-    populateCategories();
-    filterQuotes();
+    const newQuote = { text, category };
+
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newQuote)
+      });
+
+      if (response.ok) {
+        const savedQuote = await response.json();
+        quotes.push({ ...savedQuote, category });  // Add to local array
+        saveQuotes();
+        populateCategories();
+        filterQuotes();
+        alert('Quote added and saved to the server!');
+      } else {
+        alert('Failed to save the quote to the server.');
+      }
+    } catch (error) {
+      console.error('Error posting the quote:', error);
+      alert('Error communicating with the server.');
+    }
   } else {
     alert('Both quote and category are required!');
   }
@@ -161,7 +180,6 @@ importFileInput.addEventListener('change', importFromJsonFile);
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
-  createAddQuoteForm();
   populateCategories();
   filterQuotes();
 });
